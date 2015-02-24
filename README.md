@@ -42,6 +42,28 @@ where `map.yaml` specifies the map you want to load.
   $ rosrun rviz rviz
   ```
 
+Import into Mongodb (commands):
+-------------------------------
+
+
+SOMA MESSAGES
+
+    ```
+    $ mongoimport -d message_store -c soma --port 62345 --file soma_message_store.json
+    ```
+ROI MESSAGES
+
+    ```
+    $ mongoimport -d message_store -c soma_roi --port 62345 --file soma_roi.json 
+    ```
+    
+GEOSPATIAL MESSAGES
+
+    ```
+    $ mongoimport -d geospatial__store -c soma --port 62345 --file soma_geospatial_store.json 
+    ```
+
+
 SOMA object manager
 -------------------
 
@@ -49,6 +71,8 @@ SOMA object manager
 
     ```
     $ rosrun soma_manager soma.py <map> <config>
+    
+    $ rosrun soma_manager soma.py uob_lib uob_lib_conf
     ```
 where `map` denotes the name of the 2D map (Step 3) and `config` denotes an object configuration within this map. By default, the configuration file `soma_objects/config/default.json` is used to initialize the list of available object types. Alternatively, the following command can be used to use a different configuration file:
 
@@ -67,6 +91,7 @@ SOMA ROI manager
 
     ```
     $ rosrun soma_roi_manager soma_roi.py <map> <config>
+    $ rosrun soma_roi_manager soma_roi.py uob_lib uob_lib_conf
     ```
 where `map` denotes the name of the 2D map (Step 3) and `config` denotes an object configuration within this map. By default, the configuration file `soma_roi_manager/config/default.json` is used to initialize the list of available ROI types. Alternatively, the following command can be used to use a different configuration file:
 
