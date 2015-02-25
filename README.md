@@ -119,8 +119,7 @@ SOMA trajectory importer
     ```
     $ rosrun soma_trajectory trajectory_importer.py
     ```
-where `map` denotes the name of the 2D map and `config` denotes an object configuration within this map.
- 
+
 
 SOMA trajectory query service
 -----------------------------
