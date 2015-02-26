@@ -34,11 +34,13 @@ Getting started (general steps)
 2. Launch the ROS datacentre:
 
     ```
-    $ roslaunch mongodb_store datacentre.launch
+    $ roslaunch mongodb_store mongodb_store.launch db_path:=/home/strands/mongodb_store/bham_trajectory_store/
     ```
 3. Run the map_server with a 2D map:
   ```
   $ rosrun map_server map_server <map.yaml>
+  $ /home/strands/STRANDS/maps/maps/library/map.yaml 
+
   ```
 where `map.yaml` specifies the map you want to load.
     
@@ -79,7 +81,7 @@ SOMA object manager
     ```
     $ rosrun soma_manager soma.py <map> <config>
     
-    $ rosrun soma_manager soma.py uob_lib uob_lib_conf
+    $ rosrun soma_manager soma.py uob_library uob_lib_conf
     ```
 where `map` denotes the name of the 2D map (Step 3) and `config` denotes an object configuration within this map. By default, the configuration file `soma_objects/config/default.json` is used to initialize the list of available object types. Alternatively, the following command can be used to use a different configuration file:
 
@@ -98,7 +100,7 @@ SOMA ROI manager
 
     ```
     $ rosrun soma_roi_manager soma_roi.py <map> <config>
-    $ rosrun soma_roi_manager soma_roi.py uob_lib uob_lib_conf
+    $ rosrun soma_roi_manager soma_roi.py uob_library uob_lib_conf
     ```
 where `map` denotes the name of the 2D map (Step 3) and `config` denotes an object configuration within this map. By default, the configuration file `soma_roi_manager/config/default.json` is used to initialize the list of available ROI types. Alternatively, the following command can be used to use a different configuration file:
 
