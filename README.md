@@ -67,7 +67,7 @@ ROI MESSAGES
 GEOSPATIAL MESSAGES
 
     ```
-    $ mongoimport -d geospatial__store -c soma --port 62345 --file soma_geospatial_store.json 
+    $ mongoimport -d geospatial_store -c soma --port 62345 --file soma_geospatial_store.json 
     ```
 
 
