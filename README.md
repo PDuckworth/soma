@@ -120,7 +120,8 @@ SOMA trajectory importer
 
     ```
     $ rosrun soma_trajectory trajectory_importer.py
- 
+    ```
+
 
 SOMA trajectory query service
 -----------------------------
