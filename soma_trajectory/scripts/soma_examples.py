@@ -2,7 +2,7 @@
 import roslib; roslib.load_manifest("soma_trajectory")
 import rospy
 import json
-import sys
+
 from human_trajectory.msg import Trajectory
 from human_trajectory.msg import Trajectories
 from soma_trajectory.srv import TrajectoryQuery, TrajectoryQueryRequest, TrajectoryQueryResponse
@@ -33,28 +33,21 @@ if __name__=="__main__":
 
     client = QueryClient()
     gs = GeoSpatialStoreProxy('geospatial_store','soma')
-    soma_map = 'library'
-    soma_config = 'test'
+    soma_map = 'uob_library'
+    soma_config = 'uob_lib_conf'
     
     for obj in gs.obj_ids(soma_map, soma_config):
-        print "1"
         print 'OBJ', obj,  gs.type_of_obj(obj, soma_map, soma_config)
         geom = gs.geom_of_obj(obj, soma_map, soma_config)
         print 'OBJ', obj, geom
 
     for roi in gs.roi_ids(soma_map, soma_config):
-        print "2"
         print 'ROI',gs.type_of_roi(roi, soma_map, soma_config)
         geom = gs.geom_of_roi(roi, soma_map, soma_config)
         print 'ROI', roi, geom
 
-
-    sys.exit(1)
-    print "2"
     geom = gs.geom_of_trajectory('328e2f8c-6147-5525-93c4-1b281887623b')
     print 'TRAJECTORY', geom
-    
-    print "stop"
 
     # intersects with other shape [geometry is one of point, polygon, linestring]
     # within region of interest (ROI) [geometry is a polygon]
