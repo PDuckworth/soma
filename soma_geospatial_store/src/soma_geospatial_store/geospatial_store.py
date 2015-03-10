@@ -48,7 +48,7 @@ class GeoSpatialStoreProxy():
 
     def find_projection(self, query_json, projection):
         return self._client[self._db][self._collection].find(query_json, projection)
-
+   
 
     def coords_to_lnglat(self, x, y):
         earth_radius = 6371000.0 # in meters
@@ -131,7 +131,6 @@ class GeoSpatialStoreProxy():
 
     def objs_within_roi(self, roi, soma_map, soma_config):
         """Returns all the objects within a region of interest"""
-
         query = {  "soma_map":  soma_map ,
                    "soma_config": soma_config,
                    "soma_id": {"$exists": "true"},
@@ -144,6 +143,21 @@ class GeoSpatialStoreProxy():
         return res
      
 
+    def obj_coords(self, soma_id, soma_map, soma_config):
+        """Returns the map coordinates of a soma_id object"""
+        query = {  "map":  soma_map ,
+                   "config": soma_config,
+                   "id": soma_id
+                } 
+
+        res = self.find_projection(query, {"pose": 1})
+
+        if res.count() == 0:
+            return None
+
+        return res[0]['pose']['position']['x'], res[0]['pose']['position']['y'], \
+            res[0]['pose']['position']['z']
+     
 
 
 
