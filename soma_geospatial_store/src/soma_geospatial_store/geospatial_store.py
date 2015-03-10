@@ -158,7 +158,3 @@ class GeoSpatialStoreProxy():
         return res[0]['pose']['position']['x'], res[0]['pose']['position']['y'], \
             res[0]['pose']['position']['z']
      
-
-
-
-

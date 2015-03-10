@@ -63,7 +63,7 @@ if __name__=="__main__":
     # Get all trajectories that start between 14-15 o'clock 
     query = '{"start_hour": {"$gt": 13, "$lt": 15}}'
     rospy.loginfo("Query: %s" % query )
-    res = client.query(query, True)
+    #res = client.query(query, True)
     rospy.loginfo("Result: %s trajectories" % len(res.trajectories.trajectories))
 
     raw_input("Press enter to continue")
@@ -71,7 +71,7 @@ if __name__=="__main__":
     # Get all trajectories that start between 14-15 o'clock and weekday is 0  
     query = '{"start_hour": {"$gt": 13, "$lt": 15}, "start_weekday": 0}'
     rospy.loginfo("Query: %s" % query )
-    res = client.query(query, True)
+    #res = client.query(query, True)
     rospy.loginfo("Result: %s trajectories" % len(res.trajectories.trajectories))
 
     raw_input("Press enter to continue")
@@ -90,11 +90,38 @@ if __name__=="__main__":
     # near object [geometry is a point, maxDistance in meters]
     query = '{"loc": {"$nearSphere": { "$geometry":  { "type" : "Point", "coordinates" : [ -0.0002281133006505343, -4.632269674686995e-05 ] }, "$maxDistance": 1}}}'
     rospy.loginfo("Query: %s" % query )
+    #res = client.query(query, True)
+    rospy.loginfo("Result: %s trajectories" % len(res.trajectories.trajectories))
+
+    raw_input("Press enter to continue")
+    
+    print "\nPauls: "
+    query ='''{"loc": { "$geoWithin": { "$geometry":
+    {
+        "type" : "Polygon",
+        "coordinates" : [ 
+            [ 
+                    [-46.38966751098633, -25.6911792755127], 
+                    [-53.37678909301758, -25.96200942993164], 
+                    [-52.74100875854492, -8.28744888305664],
+                    [-45.58649826049805, -8.555723190307617], 
+                    [-46.38966751098633, -25.6911792755127]
+
+            ]
+        ]
+    }}}}'''
+
+    rospy.loginfo("Query: %s" % query )
     res = client.query(query, True)
     rospy.loginfo("Result: %s trajectories" % len(res.trajectories.trajectories))
 
     raw_input("Press enter to continue")
+<<<<<<< HEAD
     """
+=======
+
+
+>>>>>>> upstream
     # within region of interest (ROI) [geometry is a polygon]
     query ='''{"loc": { "$geoWithin": { "$geometry":
     {
