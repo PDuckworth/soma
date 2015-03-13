@@ -116,12 +116,8 @@ if __name__=="__main__":
     rospy.loginfo("Result: %s trajectories" % len(res.trajectories.trajectories))
 
     raw_input("Press enter to continue")
-<<<<<<< HEAD
     """
-=======
 
-
->>>>>>> upstream
     # within region of interest (ROI) [geometry is a polygon]
     query ='''{"loc": { "$geoWithin": { "$geometry":
     {
