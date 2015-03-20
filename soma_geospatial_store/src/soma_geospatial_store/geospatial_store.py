@@ -116,7 +116,12 @@ class GeoSpatialStoreProxy():
                 }
         
         res = self.find_projection(query, {"soma_roi_id": 1})     #trajectory roi
-        return res[0]['soma_roi_id']                              #test it's just one region?!
+        try:
+            ret = res[0]['soma_roi_id']
+        except:
+            print "ERROR: no ROI found"
+            ret = None
+        return ret
 
 
     def roi_ids(self, soma_map, soma_config):
