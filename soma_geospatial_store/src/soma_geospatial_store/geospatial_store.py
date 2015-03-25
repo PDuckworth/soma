@@ -86,7 +86,13 @@ class GeoSpatialStoreProxy():
         lng = 90 - math.degrees(math.acos(float(x) / earth_radius))
         lat = 90 - math.degrees(math.acos(float(y) / earth_radius))        
         return [lng , lat]
-        
+
+    def area(self, p):
+        return 0.5 * abs(sum(x0*y1 - x1*y0 for ((x0, y0), (x1, y1)) in self.segments(p)))
+
+    def segments(self, p):
+        return zip(p, p[1:] + [p[0]])
+
     # helper functions
     def obj_ids(self, soma_map, soma_config):
         query =  {  "soma_id": {"$exists": "true"},
