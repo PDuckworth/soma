@@ -239,4 +239,19 @@ class GeoSpatialStoreProxy():
         return res
      
 
+    def area_of_roi(self, roi_id, soma_map, soma_config):
+        """Returns the area of ROI in map coords"""
+        query =  { "roi_id": roi_id,
+                   "map":  soma_map ,
+                   "config": soma_config
+        }
+        res = self.find_projection(query, {"pose": 1})
+        coords = []
+        for i in res:
+            coords.append((i['pose']['position']['x'], i['pose']['position']['y']))
+
+        if res.count() == 0:
+            return None
+        return self.area(coords)
+
 
