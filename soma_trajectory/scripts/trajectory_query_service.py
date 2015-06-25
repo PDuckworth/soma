@@ -44,7 +44,7 @@ class TrajectoryQueryService():
             self.vis.clear()
 
         res = TrajectoryQueryResponse()
-        res.trajectories = Trajectories()
+        res.trajectories = Trajectories()   
         try:
             json_query = json.loads(req.query)
             trajectories = self.gs.find(json_query)
@@ -65,6 +65,7 @@ class TrajectoryQueryService():
 
         rospy.loginfo("Query result: %s trajectories" % count)
 
+       
         if req.visualize:
             rospy.loginfo("Visualize result on topic: %s" % self.topic)
             self.vis.visualize_trajectories(res.trajectories)

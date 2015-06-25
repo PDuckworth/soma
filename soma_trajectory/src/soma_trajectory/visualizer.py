@@ -51,7 +51,6 @@ class TrajectoryVisualizer():
         for t in msg.trajectories:
             self.visualize_trajectory(t)
 
-
     def clear(self):
         self._server.clear()
         self._server.applyChanges()
@@ -84,32 +83,37 @@ class TrajectoryVisualizer():
         line_marker.scale.x = 0.1
 
         random.seed(traj.uuid)
-        val = random.random()
-        line_marker.color.r = self.r_func(val)
-        line_marker.color.g = self.g_func(val)
-        line_marker.color.b = self.b_func(val)
+        #val = random.random()
+        #line_marker.color.r = self.r_func(val)
+        #line_marker.color.g = self.g_func(val)
+        #line_marker.color.b = self.b_func(val)
+        line_marker.color.r = 0
+        line_marker.color.g = 0
+        line_marker.color.b = 1.0        
         line_marker.color.a = 1.0
 
         line_marker.points = []
 
-        for pt in traj.trajectory:
+        for cnt, pt in enumerate(traj.trajectory):
+            if cnt % 10 !=0: continue
             x = pt.pose.position.x
             y = pt.pose.position.y
             p = Point()
             p.x = x - int_marker.pose.position.x  
             p.y = y - int_marker.pose.position.y
             line_marker.points.append(p)
-
-        # line_marker.colors = []
-        # for i, vel in enumerate(traj.vel):
-        #     if i % MOD == 0:
-        #         color = ColorRGBA()
-        #         val = vel / traj.max_vel
-        #         color.r = r_func(val)
-        #         color.g = g_func(val)
-        #         color.b = b_func(val)
-        #         color.a = 1.0
-        #         line_marker.colors.append(color)
+    
+        l = len(traj.trajectory)
+        line_marker.colors = []
+        for i, pt in enumerate(traj.trajectory):
+            if i % 10 !=0: continue
+            color = ColorRGBA()
+            #val = vel / traj.max_vel
+            color.r = 1.0 - float(i)/float(l)
+            color.g = float(i)/float(l)
+            color.b = 0.0
+            color.a = 1.0
+            line_marker.colors.append(color)
         
                 
         # create a control which will move the box
