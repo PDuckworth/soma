@@ -7,6 +7,7 @@ import json
 import argparse
 import random
 import copy
+import sys
 
 from threading import Timer
 
@@ -219,7 +220,7 @@ class SOMAManager():
         soma_obj.type = soma_type
         soma_obj.pose = pose
         soma_obj.pose.position.z = 0.0
-        soma_obj.frame = '/map'
+        soma_obj.frame = 'map'
         soma_obj.mesh = self.mesh[soma_type]
 
         _id = self._msg_store.insert(soma_obj)
@@ -291,10 +292,11 @@ class SOMAManager():
     def create_object_marker(self, soma_obj, soma_type, pose):
         # create an interactive marker for our server
         int_marker = InteractiveMarker()
-        int_marker.header.frame_id = "/map"
+        int_marker.header.frame_id = "map"
         int_marker.name = soma_obj
         int_marker.description = "id" + soma_obj
         int_marker.pose = pose
+        int_marker.pose.position.z = 0.01 
         
         mesh_marker = Marker()
         mesh_marker.type = Marker.MESH_RESOURCE
@@ -349,8 +351,8 @@ if __name__=="__main__":
     parser.add_argument("map", nargs=1, help='Name of the used 2D map')
     parser.add_argument("conf", nargs=1, help='Name of the object configuration')
     parser.add_argument('-t', metavar='config-file')
-                        
-    args = parser.parse_args()
+                    
+    args = parser.parse_args(rospy.myargv(argv=sys.argv)[1:])
     
     rospy.init_node("soma_obj")
     rospy.loginfo("Running SOMA (map: %s, conf: %s, types: %s)", args.map[0], args.conf[0], args.t)

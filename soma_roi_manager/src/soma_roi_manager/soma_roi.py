@@ -7,6 +7,7 @@ import json
 import argparse
 import random
 import copy
+import sys
 
 from threading import Timer
 
@@ -346,7 +347,7 @@ class SOMAROIManager():
         soma_obj.config = str(self.soma_conf)
         soma_obj.type = soma_type
         soma_obj.pose = pose
-        soma_obj.frame = '/map'
+        soma_obj.frame = 'map'
 
         _id = self._msg_store.insert(soma_obj)
         
@@ -477,10 +478,11 @@ class SOMAROIManager():
     def create_object_marker(self, soma_obj, roi, soma_type, pose):
         # create an interactive marker for our server
         int_marker = InteractiveMarker()
-        int_marker.header.frame_id = "/map"
+        int_marker.header.frame_id = "map"
         int_marker.name = soma_obj
         int_marker.description = soma_type + ' (' + roi +  ')'
         int_marker.pose = pose
+        int_marker.pose.position.z = 0.01
         
         marker = Marker()
         marker.type = Marker.SPHERE
@@ -525,7 +527,7 @@ class SOMAROIManager():
     def create_roi_marker(self, roi, soma_type, pose, points):
         #print "POINTS: " + str(points)
         int_marker = InteractiveMarker()
-        int_marker.header.frame_id = "/map"
+        int_marker.header.frame_id = "map"
         int_marker.name = "ROI-" + roi
         int_marker.description = roi
         int_marker.pose = pose
@@ -576,7 +578,7 @@ if __name__=="__main__":
     parser.add_argument("conf", nargs=1, help='Name of the object configuration')
     parser.add_argument('-t', metavar='config-file')
                         
-    args = parser.parse_args()
+    args = parser.parse_args(rospy.myargv(argv=sys.argv)[1:])
     
     rospy.init_node("soma")
     rospy.loginfo("Running SOMA (map: %s, conf: %s, types: %s)", args.map[0], args.conf[0], args.t)
