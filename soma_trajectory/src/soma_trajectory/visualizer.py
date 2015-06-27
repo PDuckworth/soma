@@ -15,7 +15,8 @@ class TrajectoryVisualizer():
         
     def __init__(self, topic):
         self._server = InteractiveMarkerServer(topic)
-        
+        self.vis_option = "random"
+
     def trapezoidal_shaped_func(self, a, b, c, d, x):
         min_val = min(min((x - a)/(b - a), float(1.0)), (d - x)/(d - c))
         return max(min_val, float(0.0))
@@ -47,7 +48,8 @@ class TrajectoryVisualizer():
         value = self.trapezoidal_shaped_func(a,b,c,d,x)
         return value
 
-    def visualize_trajectories(self, msg):
+    def visualize_trajectories(self, msg, vis_option):
+        self.vis_option = vis_option
         for t in msg.trajectories:
             self.visualize_trajectory(t)
 
@@ -83,15 +85,12 @@ class TrajectoryVisualizer():
         line_marker.scale.x = 0.1
 
         random.seed(traj.uuid)
-        #val = random.random()
-        #line_marker.color.r = self.r_func(val)
-        #line_marker.color.g = self.g_func(val)
-        #line_marker.color.b = self.b_func(val)
-        line_marker.color.r = 0
-        line_marker.color.g = 0
-        line_marker.color.b = 1.0        
+        val = random.random()
+        line_marker.color.r = self.r_func(val)
+        line_marker.color.g = self.g_func(val)
+        line_marker.color.b = self.b_func(val)
         line_marker.color.a = 1.0
-
+        
         line_marker.points = []
 
         for cnt, pt in enumerate(traj.trajectory):
@@ -103,17 +102,28 @@ class TrajectoryVisualizer():
             p.y = y - int_marker.pose.position.y
             line_marker.points.append(p)
     
-        l = len(traj.trajectory)
-        line_marker.colors = []
-        for i, pt in enumerate(traj.trajectory):
-            if i % 10 !=0: continue
-            color = ColorRGBA()
-            #val = vel / traj.max_vel
-            color.r = 1.0 - float(i)/float(l)
-            color.g = float(i)/float(l)
-            color.b = 0.0
-            color.a = 1.0
-            line_marker.colors.append(color)
+        if self.vis_option != "random":
+            l = len(traj.trajectory)
+            line_marker.colors = []
+            for i, pt in enumerate(traj.trajectory):
+                if i % 10 !=0: continue
+                color = ColorRGBA()
+                color.a = 1.0
+
+                if self.vis_option == "direction_red_green":
+                    color.r = 1.0 - float(i)/float(l)
+                    color.g = float(i)/float(l)
+                    color.b = 0.0
+                elif self.vis_option == "direction_red_blue":
+                    color.r = 1.0 - float(i)/float(l)
+                    color.g = 0.0
+                    color.b = float(i)/float(l)
+                elif self.vis_option == "direction_blue_green":
+                    color.r = 0.0
+                    color.g = float(i)/float(l)
+                    color.b = 1.0 - float(i)/float(l)
+
+                line_marker.colors.append(color)
         
                 
         # create a control which will move the box

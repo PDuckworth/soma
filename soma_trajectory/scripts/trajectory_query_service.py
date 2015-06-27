@@ -68,7 +68,9 @@ class TrajectoryQueryService():
        
         if req.visualize:
             rospy.loginfo("Visualize result on topic: %s" % self.topic)
-            self.vis.visualize_trajectories(res.trajectories)
+            rospy.loginfo("Visualize option: %s" % req.vis_option)
+
+            self.vis.visualize_trajectories(res.trajectories, req.vis_option)
         rospy.loginfo("Response returned")
         res.error = False
         return res

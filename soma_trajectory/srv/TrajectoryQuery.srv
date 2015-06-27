@@ -1,5 +1,6 @@
 string query
 bool visualize
+string vis_option
 ---
 bool error 
 human_trajectory/Trajectories trajectories
