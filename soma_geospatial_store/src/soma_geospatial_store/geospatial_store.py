@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-import roslib
-roslib.load_manifest("soma_geospatial_store")
 import rospy
 import pymongo
 import math
@@ -121,13 +119,14 @@ class GeoSpatialStoreProxy():
                              "coordinates" : geom}}}
                 }
         
-        res = self.find_projection(query, {"soma_roi_id": 1})     #trajectory roi
+        res = self.find_projection(query, {"soma_roi_id": 1})
+
         try:
             ret = res[0]['soma_roi_id']
         except:
             print "ERROR: no ROI found"
             ret = None
-        return ret
+        return ret  
 
 
     def roi_ids(self, soma_map, soma_config):
@@ -191,6 +190,33 @@ class GeoSpatialStoreProxy():
         return res[0]['loc']
 
 
+    def rois_containing_obj(self, obj_id, soma_map, soma_config):
+        """ Returns all the rois that contain this object."""
+            
+        # first find the object
+        query = {  "soma_map":  soma_map ,
+                   "soma_config": soma_config,
+                   "soma_id": obj_id,        
+        }
+        obj = self.find_one(query)
+        
+        if obj is None:
+            print 'No object found with id %s' % obj_id
+            return None 
+
+        query = { "soma_map":  soma_map ,
+                    "soma_config": soma_config,
+                    "soma_roi_id": {"$exists": "true"},                    
+                    "loc": {"$geoIntersects": {"$geometry": obj['loc']}} 
+        }
+
+        res = self.find_projection(query, {"soma_roi_id": 1})
+        ret = []
+        for ent in res:
+            ret.append(ent["soma_roi_id"])
+        return ret
+
+
     def objs_within_roi(self, roi, soma_map, soma_config):
         """Returns all the objects within a region of interest"""
         query = {  "soma_map":  soma_map ,
@@ -215,7 +241,23 @@ class GeoSpatialStoreProxy():
         if res.count() == 0:
             return None
         return res
-    
+
+
+    def trajectories_within_roi(self, roi, soma_map, soma_config):
+        """Returns all the trajectories within a region of interest"""
+
+        query = {  "soma_map":  soma_map ,
+                   "soma_config": soma_config,
+                   "soma_id": {"$exists": "true"},
+                   "loc": {"$geoIntersects": {"$geometry": roi}} 
+                }
+
+        res = self.find(query)
+        if res.count() == 0:
+            return None
+        return res
+
+
 
     def obj_coords(self, soma_id, soma_map, soma_config):
         """Returns the map coordinates of a soma_id object"""
@@ -223,13 +265,13 @@ class GeoSpatialStoreProxy():
                    "config": soma_config,
                    "id": soma_id
                 } 
+
         res = self.find_projection(query, {"pose": 1})
 
         if res.count() == 0:
             return None
         return res[0]['pose']['position']['x'], res[0]['pose']['position']['y'], \
             res[0]['pose']['position']['z']
-     
 
     def observed_roi(self, view_tri, soma_map, soma_config):
         """Returns list of regions the robot can see"""
@@ -243,7 +285,23 @@ class GeoSpatialStoreProxy():
                 } 
         res = self.find_projection(query, {"soma_roi_id" : 1})
         return res
-     
+
+
+
+    def area_of_roi(self, roi_id, soma_map, soma_config):
+        """Returns the area of ROI in map coords"""
+        query =  { "roi_id": roi_id,
+                   "map":  soma_map ,
+                   "config": soma_config
+        }
+        res = self.find_projection(query, {"pose": 1})
+        coords = []
+        for i in res:
+            coords.append((i['pose']['position']['x'], i['pose']['position']['y']))
+
+        if res.count() == 0:
+            return None
+        return self.area(coords)
 
     def area_of_roi(self, roi_id, soma_map, soma_config):
         """Returns the area of ROI in map coords"""

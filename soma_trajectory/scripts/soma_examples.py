@@ -28,14 +28,14 @@ class QueryClient():
 
 
 if __name__=="__main__":
-    rospy.init_node("query_examples")    
+    rospy.init_node("query_examples")
     rospy.loginfo("Running query examples")
 
     client = QueryClient()
     gs = GeoSpatialStoreProxy('geospatial_store','soma')
     soma_map = 'uob_library'
     soma_config = 'uob_lib_conf'
-    
+
     for obj in gs.obj_ids(soma_map, soma_config):
         print 'OBJ', obj,  gs.type_of_obj(obj, soma_map, soma_config)
         geom = gs.geom_of_obj(obj, soma_map, soma_config)
@@ -58,4 +58,3 @@ if __name__=="__main__":
     rospy.loginfo("Result: %s trajectories" % len(res.trajectories.trajectories))
 
 
-   
